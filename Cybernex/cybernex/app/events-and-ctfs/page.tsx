@@ -1,5 +1,3 @@
-'use client'; // Mark this file as a client-side component
-
 import Link from 'next/link';
 import { Calendar, ExternalLink, ChevronDown, ChevronUp, Search } from 'lucide-react';
 import { useState } from 'react';

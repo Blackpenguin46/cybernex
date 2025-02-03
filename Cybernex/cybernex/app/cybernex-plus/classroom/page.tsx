@@ -5,20 +5,9 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Video, MessageCircle, Folder } from "lucide-react"
 
-const courses = [
-  { id: 1, title: "Advanced Network Security", instructor: "Jane Doe" },
-  { id: 2, title: "Ethical Hacking Masterclass", instructor: "John Smith" },
-  { id: 3, title: "Cloud Security Fundamentals", instructor: "Alice Johnson" },
-]
-
-const projects = [
-  { id: 1, title: "Build a Secure Web Application" },
-  { id: 2, title: "Implement a Zero Trust Network" },
-  { id: 3, title: "Develop a Threat Intelligence Platform" },
-]
-
 export default function ClassroomPage() {
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const [subscriptionStatus, setSubscriptionStatus] = useState("") // Added state for subscription status
   const router = useRouter()
 
   useEffect(() => {
@@ -29,9 +18,11 @@ export default function ClassroomPage() {
         const response = await fetch("/api/check-subscription")
         const data = await response.json()
         setIsSubscribed(data.isSubscribed)
+        setSubscriptionStatus(data.subscriptionStatus) // Update subscription status
       } catch (error) {
         console.error("Error checking subscription:", error)
         setIsSubscribed(false)
+        setSubscriptionStatus("") // Set to empty string on error
       }
     }
 
@@ -42,6 +33,38 @@ export default function ClassroomPage() {
     router.push("/cybernex-plus")
     return null
   }
+
+  // Mock content - replace with actual content based on subscription
+  const courses =
+    subscriptionStatus === "pro"
+      ? [
+          // Pro plan courses
+          { id: 1, title: "Advanced Network Security", instructor: "Jane Doe" },
+          { id: 2, title: "Ethical Hacking Masterclass", instructor: "John Smith" },
+          { id: 3, title: "Cloud Security Fundamentals", instructor: "Alice Johnson" },
+          { id: 4, title: "Advanced Penetration Testing", instructor: "Bob Williams" },
+          { id: 5, title: "Malware Analysis and Reverse Engineering", instructor: "Charlie Brown" },
+        ]
+      : [
+          // Basic plan courses
+          { id: 1, title: "Introduction to Networking", instructor: "Eve Jackson" },
+          { id: 2, title: "Cybersecurity Fundamentals", instructor: "Mallory Davis" },
+        ]
+
+  const projects =
+    subscriptionStatus === "pro"
+      ? [
+          // Pro plan projects
+          { id: 1, title: "Build a Secure Web Application" },
+          { id: 2, title: "Implement a Zero Trust Network" },
+          { id: 3, title: "Develop a Threat Intelligence Platform" },
+          { id: 4, title: "Advanced Persistent Threat (APT) Simulation" },
+        ]
+      : [
+          // Basic plan projects
+          { id: 1, title: "Set up a Simple Firewall" },
+          { id: 2, title: "Password Manager with Encryption" },
+        ]
 
   return (
     <div className="container mx-auto px-4 py-12">
