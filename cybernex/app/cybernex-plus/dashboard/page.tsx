@@ -4,12 +4,16 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Book, Calendar, MessageCircle, Folder, ArrowRight } from "lucide-react"
+import { useAuth } from '@/app/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
 
 export default function DashboardPage() {
   const [userName, setUserName] = useState<string | null>(null)
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false) // New state for admin status
   const searchParams = useSearchParams()
+  const { user } = useAuth()
+  const [content, setContent] = useState<any[]>([])
 
   useEffect(() => {
     // Check for admin status (replace with actual authentication logic)
@@ -55,6 +59,19 @@ export default function DashboardPage() {
     }
 
     checkSubscription()
+
+    const fetchPremiumContent = async () => {
+      const { data, error } = await supabase
+        .from('premium_content')
+        .select('*')
+        .eq('access_level', 'plus')
+
+      if (!error && data) {
+        setContent(data)
+      }
+    }
+
+    fetchPremiumContent()
   }, [])
 
   // Conditionally render content based on subscription or admin status
@@ -150,6 +167,19 @@ export default function DashboardPage() {
           <Link href="/" className="text-gold hover:underline">
             Back to Home
           </Link>
+        </div>
+
+        {/* Premium Content */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+          {content.map((item) => (
+            <div key={item.id} className="border rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-4">{item.title}</h2>
+              <p className="mb-4">{item.description}</p>
+              <a href={item.url} className="text-blue-600 hover:underline">
+                Access Content
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </div>

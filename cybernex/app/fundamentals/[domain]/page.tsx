@@ -1,42 +1,46 @@
-import Link from "next/link";
-import { ArrowLeft, BookOpen, Lightbulb, Target, ChevronDown, ChevronUp } from "lucide-react";
-import ErrorBoundary from "@/app/components/ErrorBoundary";
-import { useState } from "react";
+"use client"
+
+import Link from "next/link"
+import { ArrowLeft, BookOpen, Lightbulb, Target, ChevronDown, ChevronUp } from "lucide-react"
+import ErrorBoundary from "@/app/components/ErrorBoundary"
+import { useState } from "react"
 
 interface Resource {
-  title: string;
-  url: string;
-  description: string;
+  title: string
+  url: string
+  description: string
 }
 
 export interface DomainContent {
-  title: string;
-  description: string;
-  importance: string;
-  useCases: string[];
-  keyTopics: string[];
-  resources: Resource[];
+  title: string
+  description: string
+  importance: string
+  useCases: string[]
+  keyTopics: string[]
+  resources: Resource[]
 }
 
 interface PageProps {
-  params: { domain: string };
+  params: { domain: string }
 }
 
 async function getDomainContent(domain: string): Promise<DomainContent> {
   try {
-    const module = await import(`../content/${domain}`);
-    return module.default;
+    const module = await import(`../content/${domain}`)
+    return module.default
   } catch (error) {
-    console.error(`Error loading content for domain: ${domain}`, error);
-    throw new Error(`Failed to load content for ${domain}`);
+    console.error(`Error loading content for domain: ${domain}`, error)
+    throw new Error(`Failed to load content for ${domain}`)
   }
 }
 
-export default async function DomainPage({ params }: PageProps) {
-  let domainContent: DomainContent;
+export default async function DomainPage({ params }: { params: { domain: string } }) {
+  const [isOpen, setIsOpen] = useState(true) //This line was moved here from CollapsibleSection
+
+  let domainContent: DomainContent
 
   try {
-    domainContent = await getDomainContent(params.domain);
+    domainContent = await getDomainContent(params.domain)
   } catch (error) {
     return (
       <div className="container mx-auto px-6 py-12">
@@ -50,7 +54,7 @@ export default async function DomainPage({ params }: PageProps) {
           Back to Fundamentals
         </Link>
       </div>
-    );
+    )
   }
 
   return (
@@ -82,7 +86,9 @@ export default async function DomainPage({ params }: PageProps) {
         <CollapsibleSection title="Use Cases" icon={<Target className="w-6 h-6" />}>
           <ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
             {domainContent.useCases.map((useCase, index) => (
-              <li key={index} className="mb-2">{useCase}</li>
+              <li key={index} className="mb-2">
+                {useCase}
+              </li>
             ))}
           </ul>
         </CollapsibleSection>
@@ -91,7 +97,9 @@ export default async function DomainPage({ params }: PageProps) {
         <CollapsibleSection title="Key Topics">
           <ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
             {domainContent.keyTopics.map((topic, index) => (
-              <li key={index} className="mb-2">{topic}</li>
+              <li key={index} className="mb-2">
+                {topic}
+              </li>
             ))}
           </ul>
         </CollapsibleSection>
@@ -116,19 +124,16 @@ export default async function DomainPage({ params }: PageProps) {
         </section>
       </div>
     </ErrorBoundary>
-  );
+  )
 }
 
 // Collapsible Section Component
 function CollapsibleSection({ title, icon, children }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true)
 
   return (
     <section className="mb-8">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center text-left mb-4"
-      >
+      <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center text-left mb-4">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 flex items-center">
           {icon && <span className="mr-2">{icon}</span>}
           {title}
@@ -141,6 +146,6 @@ function CollapsibleSection({ title, icon, children }) {
       </button>
       {isOpen && <div>{children}</div>}
     </section>
-  );
+  )
 }
 

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Book, Briefcase, GraduationCap, FileUp, Award, Gift } from "lucide-react"
+import { Book, Briefcase, Calendar, GraduationCap, FileUp } from "lucide-react"
 
 export default function CollegeStudentsPage() {
   return (
@@ -51,27 +51,16 @@ export default function CollegeStudentsPage() {
         </Link>
 
         <Link
-          href="/college-students/scholarships"
+          href="/events-and-ctfs"
           className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
         >
           <div className="flex items-center mb-4">
-            <Award className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" />
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Scholarships</h2>
+            <Calendar className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" />
+            <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Events and CTFs</h2>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Discover cybersecurity scholarships to support your education
+            Explore cybersecurity events and Capture The Flag competitions
           </p>
-        </Link>
-
-        <Link
-          href="/college-students/free-services"
-          className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
-        >
-          <div className="flex items-center mb-4">
-            <Gift className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" />
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Free Services</h2>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">Access free tools and platforms for cybersecurity students</p>
         </Link>
 
         <Link

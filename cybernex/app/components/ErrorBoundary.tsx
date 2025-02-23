@@ -1,39 +1,43 @@
 "use client"
 
-import React, { type ErrorInfo, type ReactNode } from "react"
+import { Component, ErrorInfo, ReactNode } from 'react'
 
-interface ErrorBoundaryProps {
-  children: ReactNode
+interface Props {
+  children?: ReactNode
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean
   error?: Error
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false }
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo)
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Uncaught error:', error, errorInfo)
   }
 
-  render() {
+  public render() {
     if (this.state.hasError) {
       return (
-        <div className="container mx-auto px-6 py-12">
-          <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">Something went wrong</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            We're sorry, but an error occurred while loading this page.
-          </p>
-          <p className="text-gray-600 dark:text-gray-400">Error: {this.state.error?.message}</p>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
+            <p className="text-gray-600 mb-4">{this.state.error?.message}</p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={() => window.location.reload()}
+            >
+              Try again
+            </button>
+          </div>
         </div>
       )
     }

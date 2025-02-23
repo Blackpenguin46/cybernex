@@ -1,17 +1,19 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { Calendar } from 'lucide-react'
+import type React from "react"
+
+import { useState } from "react"
+import { Calendar } from "lucide-react"
 
 export default function MeetingScheduler() {
-  const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTime, setSelectedTime] = useState('')
+  const [selectedDate, setSelectedDate] = useState("")
+  const [selectedTime, setSelectedTime] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Here you would typically make an API call to schedule the meeting
-    console.log('Scheduling meeting for:', selectedDate, selectedTime)
-    alert('Meeting scheduled successfully!')
+    console.log("Scheduling meeting for:", selectedDate, selectedTime)
+    alert("Meeting scheduled successfully!")
   }
 
   return (

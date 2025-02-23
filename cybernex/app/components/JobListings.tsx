@@ -1,18 +1,18 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { ExternalLink } from 'lucide-react'
+import { useState, useEffect } from "react"
+import { ExternalLink } from "lucide-react"
 
 interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  url: string;
-  source: string;
+  id: string
+  title: string
+  company: string
+  location: string
+  url: string
+  source: string
 }
 
-export default function JobListings({ jobType }: { jobType: 'internship' | 'job' }) {
+export default function JobListings({ jobType }: { jobType: "internship" | "job" }) {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,12 +23,12 @@ export default function JobListings({ jobType }: { jobType: 'internship' | 'job'
         // In a real-world scenario, this would be your API endpoint
         const response = await fetch(`/api/jobs?type=${jobType}`)
         if (!response.ok) {
-          throw new Error('Failed to fetch jobs')
+          throw new Error("Failed to fetch jobs")
         }
         const data = await response.json()
         setJobs(data)
       } catch (err) {
-        setError('Failed to load job listings. Please try again later.')
+        setError("Failed to load job listings. Please try again later.")
       } finally {
         setLoading(false)
       }
@@ -52,10 +52,10 @@ export default function JobListings({ jobType }: { jobType: 'internship' | 'job'
           <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">{job.title}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">{job.company}</p>
           <p className="text-sm text-gray-600 dark:text-gray-400">{job.location}</p>
-          <a 
-            href={job.url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <a
+            href={job.url}
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-2 text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center text-sm"
           >
             View on {job.source} <ExternalLink className="ml-1 w-4 h-4" />

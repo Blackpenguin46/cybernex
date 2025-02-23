@@ -1,17 +1,30 @@
-import { NextResponse } from "next/server"
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-  // In a real application, this would involve verifying the user's
-  // subscription status with your payment provider (e.g., Stripe).
+  const supabase = createRouteHandlerClient({ cookies })
+  
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (!session) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    }
 
-  // Mock subscription status - replace with actual logic
-  const isSubscribed = true
-  const plan = Math.random() < 0.5 ? "plus" : "pro" // Randomly assign plus or pro plan
+    const { data: subscription, error } = await supabase
+      .from('subscriptions')
+      .select('plan_type, status')
+      .eq('user_id', session.user.id)
+      .eq('status', 'active')
+      .single()
 
-  // For demonstration, store the subscription status in local storage
-  // In a real application, you would use a database or session management
-  localStorage.setItem("subscription", JSON.stringify({ plan }))
+    if (error) throw error
 
-  return NextResponse.json({ isSubscribed, plan })
+    return NextResponse.json({ plan: subscription?.plan_type || null })
+  } catch (error) {
+    console.error('Error:', error)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+  }
 }
 

@@ -15,21 +15,21 @@ export default function CyberNexCommunityPage() {
           <Users className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Discussion Forums</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">Engage in discussions on various cybersecurity topics with experts and beginners alike.</p>
-          <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Join the conversation</Link>
+          <Link href="/community/forums" className="text-blue-600 dark:text-blue-400 hover:underline">Join the conversation</Link>
         </div>
 
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <MessageSquare className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Study Groups</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">Find or create study groups for certifications, courses, or specific cybersecurity topics.</p>
-          <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Explore study groups</Link>
+          <Link href="/community/study-groups" className="text-blue-600 dark:text-blue-400 hover:underline">Explore study groups</Link>
         </div>
 
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <Globe className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Events</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">Discover and participate in cybersecurity events, webinars, and meetups.</p>
-          <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">View upcoming events</Link>
+          <Link href="/community/events" className="text-blue-600 dark:text-blue-400 hover:underline">View upcoming events</Link>
         </div>
       </div>
 

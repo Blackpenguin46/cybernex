@@ -1,7 +1,97 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { CheckCircle, ArrowRight } from "lucide-react"
+import { useAuth } from "../../contexts/AuthContext"
+import { supabase } from "../../lib/supabase"
+import { LoadingSpinner } from "@/app/components/LoadingSpinner"
+import { createClient } from "@/lib/auth"
+
+type Subscription = {
+  id: string
+  user_id: string
+  plan: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
+interface Course {
+  id: string
+  title: string
+  description: string
+  duration: string
+  level: string
+  progress?: number
+}
 
 export default function CyberNexPlusPage() {
+  const { user, loading: authLoading } = useAuth()
+  const [subscription, setSubscription] = useState<Subscription | null>(null)
+  const [courses, setCourses] = useState<Course[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    if (user) {
+      fetchSubscription()
+      loadCourses()
+    }
+  }, [user])
+
+  const fetchSubscription = async () => {
+    if (!user) return
+
+    const { data, error } = await supabase.from("subscriptions").select("*").eq("user_id", user.id).single()
+
+    if (error) {
+      console.error("Error fetching subscription:", error)
+    } else {
+      setSubscription(data)
+    }
+  }
+
+  const handleSubscribe = async (plan: string) => {
+    if (!user) {
+      // Redirect to login or show error
+      return
+    }
+
+    // In a real application, you would integrate with a payment provider here
+    // For this example, we'll just update the subscription status directly
+    const { data, error } = await supabase
+      .from("subscriptions")
+      .upsert({ user_id: user.id, plan, status: "active" })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Error updating subscription:", error)
+    } else {
+      setSubscription(data)
+    }
+  }
+
+  const loadCourses = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('plus_courses')
+        .select('*')
+      
+      if (error) throw error
+      setCourses(data || [])
+    } catch (error) {
+      console.error('Error loading courses:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (authLoading || loading) {
+    return <LoadingSpinner />
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -61,14 +151,12 @@ export default function CyberNexPlusPage() {
                 <li>Access to weekly town halls</li>
                 <li>Access to exclusive courses</li>
               </ul>
-              <Link
-                href="https://buy.stripe.com/7sIbJP95iaHk1GgcMM"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center bg-gradient-to-r from-gold to-yellow-500 text-gray-900 px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-opacity"
+              <button
+                onClick={() => handleSubscribe("plus")}
+                className="block w-full text-center bg-gradient-to-r from-gold to-yellow-500 text-gray-900 px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-opacity"
               >
-                Get Started with CyberNex+
-              </Link>
+                {subscription?.plan === "plus" ? "Current Plan" : "Get Started with CyberNex+"}
+              </button>
             </div>
 
             {/* CyberNex Pro Plan */}
@@ -83,14 +171,12 @@ export default function CyberNexPlusPage() {
                 <li>Bi-weekly meetings with industry professionals</li>
                 <li>1-on-1 mentoring with industry professionals</li>
               </ul>
-              <Link
-                href="https://buy.stripe.com/5kA9BH5T64iWbgQ289"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center bg-gradient-to-r from-gold to-yellow-500 text-gray-900 px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-opacity"
+              <button
+                onClick={() => handleSubscribe("pro")}
+                className="block w-full text-center bg-gradient-to-r from-gold to-yellow-500 text-gray-900 px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-opacity"
               >
-                Get Started with CyberNex Pro
-              </Link>
+                {subscription?.plan === "pro" ? "Current Plan" : "Get Started with CyberNex Pro"}
+              </button>
             </div>
           </div>
         </section>
@@ -112,6 +198,37 @@ export default function CyberNexPlusPage() {
             <ArrowRight className="w-4 h-4 mr-2" />
             Back to Home
           </Link>
+        </div>
+
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold mb-8">CyberNex+ Courses</h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course) => (
+              <div key={course.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">{course.description}</p>
+                <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <span>{course.duration}</span>
+                  <span>{course.level}</span>
+                </div>
+                {course.progress !== undefined && (
+                  <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                    <div 
+                      className="bg-blue-600 h-2.5 rounded-full" 
+                      style={{ width: `${course.progress}%` }}
+                    ></div>
+                  </div>
+                )}
+                <Link
+                  href={`/cybernex-plus/courses/${course.id}`}
+                  className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                >
+                  {course.progress ? 'Continue Learning' : 'Start Course'}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

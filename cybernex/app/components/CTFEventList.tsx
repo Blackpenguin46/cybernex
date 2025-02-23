@@ -1,5 +1,5 @@
-import { CalendarDays, MapPin, ExternalLink } from 'lucide-react'
-import Link from 'next/link'
+import { CalendarDays, MapPin, ExternalLink } from "lucide-react"
+import Link from "next/link"
 
 interface CTFEvent {
   name: string
@@ -15,50 +15,50 @@ const ctfEvents: CTFEvent[] = [
     date: "August 10-13, 2023",
     location: "Las Vegas, NV",
     format: "On-site",
-    website: "https://defcon.org/html/defcon-31/dc-31-index.html"
+    website: "https://defcon.org/html/defcon-31/dc-31-index.html",
   },
   {
     name: "BSides Las Vegas CTF",
     date: "August 8-9, 2023",
     location: "Las Vegas, NV",
     format: "On-site",
-    website: "https://www.bsideslv.org/"
+    website: "https://www.bsideslv.org/",
   },
   {
     name: "CSAW CTF Qualification Round",
     date: "September 15-17, 2023",
     location: "Online",
     format: "Online",
-    website: "https://www.csaw.io/ctf"
+    website: "https://www.csaw.io/ctf",
   },
   {
     name: "picoCTF",
     date: "March 14-28, 2024",
     location: "Online",
     format: "Online",
-    website: "https://picoctf.org/"
+    website: "https://picoctf.org/",
   },
   {
     name: "SANS Holiday Hack Challenge",
     date: "December 2023 - January 2024",
     location: "Online",
     format: "Online",
-    website: "https://www.sans.org/mlp/holiday-hack-challenge/"
+    website: "https://www.sans.org/mlp/holiday-hack-challenge/",
   },
   {
     name: "National Cyber League (NCL)",
     date: "Fall 2023 Season: October - November 2023",
     location: "Online",
     format: "Online",
-    website: "https://nationalcyberleague.org/"
+    website: "https://nationalcyberleague.org/",
   },
   {
     name: "MITRE CTF",
     date: "April 2024 (Exact dates TBA)",
     location: "Online",
     format: "Online",
-    website: "https://mitrecyberacademy.org/competitions/"
-  }
+    website: "https://mitrecyberacademy.org/competitions/",
+  },
 ]
 
 export default function CTFEventList() {
@@ -76,7 +76,7 @@ export default function CTFEventList() {
             <span>{event.location}</span>
           </div>
           <p className="text-gray-600 dark:text-gray-400 mb-4">Format: {event.format}</p>
-          <Link 
+          <Link
             href={event.website}
             target="_blank"
             rel="noopener noreferrer"

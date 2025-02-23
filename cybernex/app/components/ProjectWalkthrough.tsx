@@ -1,21 +1,20 @@
-import React from 'react'
-import Link from 'next/link'
-import { ArrowLeft, Video, Globe } from 'lucide-react'
+import Link from "next/link"
+import { ArrowLeft, Globe } from "lucide-react"
 
 interface ProjectWalkthroughProps {
-  title: string;
-  description: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  category: string;
+  title: string
+  description: string
+  difficulty: "Beginner" | "Intermediate" | "Advanced"
+  category: string
   steps: {
-    title: string;
-    description: string;
-  }[];
-  videoTutorial: string;
+    title: string
+    description: string
+  }[]
+  videoTutorial: string
   onlineResources: {
-    title: string;
-    url: string;
-  }[];
+    title: string
+    url: string
+  }[]
 }
 
 export default function ProjectWalkthrough({
@@ -39,11 +38,15 @@ export default function ProjectWalkthrough({
 
       <div className="flex items-center mb-6">
         <span className="text-sm font-medium text-blue-600 dark:text-blue-400 mr-4">{category}</span>
-        <span className={`text-sm font-medium px-2 py-1 rounded ${
-          difficulty === 'Beginner' ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' :
-          difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' :
-          'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
-        }`}>
+        <span
+          className={`text-sm font-medium px-2 py-1 rounded ${
+            difficulty === "Beginner"
+              ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+              : difficulty === "Intermediate"
+                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+                : "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+          }`}
+        >
           {difficulty}
         </span>
       </div>
@@ -72,7 +75,12 @@ export default function ProjectWalkthrough({
       <ul className="space-y-2">
         {onlineResources.map((resource, index) => (
           <li key={index}>
-            <Link href={resource.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center">
+            <Link
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center"
+            >
               <Globe className="mr-2" />
               {resource.title}
             </Link>

@@ -1,6 +1,8 @@
-import Link from 'next/link';
-import { Calendar, ExternalLink, ChevronDown, ChevronUp, Search } from 'lucide-react';
-import { useState } from 'react';
+"use client"
+
+import Link from "next/link"
+import { Calendar, ExternalLink, ChevronDown, ChevronUp, Search } from "lucide-react"
+import { useState } from "react"
 
 // Event data organized into categories
 const events = {
@@ -8,19 +10,22 @@ const events = {
     {
       name: "National Collegiate Cyber Defense Competition (NCCDC)",
       date: "April 15-17, 2025",
-      description: "A competition that focuses on the operational aspect of managing and protecting an existing network infrastructure.",
+      description:
+        "A competition that focuses on the operational aspect of managing and protecting an existing network infrastructure.",
       link: "https://www.nationalccdc.org/",
     },
     {
       name: "CSAW CTF Qualification Round",
       date: "September 12-14, 2025",
-      description: "One of the largest student-run cybersecurity events in the world, featuring various challenges for all skill levels.",
+      description:
+        "One of the largest student-run cybersecurity events in the world, featuring various challenges for all skill levels.",
       link: "https://www.csaw.io/ctf",
     },
     {
       name: "Hack The Box University CTF",
       date: "October 3-5, 2025",
-      description: "A team-based CTF competition specifically designed for university students, featuring a wide range of cybersecurity challenges.",
+      description:
+        "A team-based CTF competition specifically designed for university students, featuring a wide range of cybersecurity challenges.",
       link: "https://www.hackthebox.com/events/university-ctf",
     },
     {
@@ -40,7 +45,8 @@ const events = {
     {
       name: "Black Hat USA",
       date: "August 5-8, 2025",
-      description: "One of the world's leading cybersecurity conferences, featuring cutting-edge research and training.",
+      description:
+        "One of the world's leading cybersecurity conferences, featuring cutting-edge research and training.",
       link: "https://www.blackhat.com/",
     },
     {
@@ -146,29 +152,29 @@ const events = {
       link: "https://www.oracle.com/cloud/security-forum/",
     },
   ],
-};
+}
 
 export default function EventsAndCTFsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [openCategory, setOpenCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [openCategory, setOpenCategory] = useState(null)
 
   // Toggle category visibility
   const toggleCategory = (category) => {
-    setOpenCategory(openCategory === category ? null : category);
-  };
+    setOpenCategory(openCategory === category ? null : category)
+  }
 
   // Filter events based on search query
   const filteredEvents = Object.keys(events).reduce((acc, category) => {
     const filtered = events[category].filter(
       (event) =>
         event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+        event.description.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     if (filtered.length > 0) {
-      acc[category] = filtered;
+      acc[category] = filtered
     }
-    return acc;
-  }, {});
+    return acc
+  }, {})
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white py-12 px-4 sm:px-6 lg:px-8">
@@ -179,7 +185,8 @@ export default function EventsAndCTFsPage() {
             Upcoming Cybersecurity Events, Conferences, and CTFs
           </h1>
           <p className="text-xl text-gray-300">
-            Explore a wide range of cybersecurity events, conferences, CTFs, workshops, and training programs to enhance your skills and career.
+            Explore a wide range of cybersecurity events, conferences, CTFs, workshops, and training programs to enhance
+            your skills and career.
           </p>
         </header>
 
@@ -245,6 +252,6 @@ export default function EventsAndCTFsPage() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 

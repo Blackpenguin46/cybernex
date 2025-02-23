@@ -1,80 +1,75 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { Search, Book, Video, FileText, ExternalLink } from 'lucide-react'
-
-const learningContent = [
-  {
-    title: "Introduction to Cybersecurity",
-    type: "course",
-    provider: "Coursera",
-    link: "/learn/intro-to-cybersecurity",
-    description: "Learn the basics of cybersecurity and its importance in the digital world."
-  },
-  {
-    title: "Ethical Hacking Fundamentals",
-    type: "video",
-    provider: "YouTube",
-    link: "/learn/ethical-hacking-fundamentals",
-    description: "A comprehensive video series on ethical hacking techniques and methodologies."
-  },
-  {
-    title: "Cryptography Essentials",
-    type: "article",
-    provider: "CyberNex Blog",
-    link: "/learn/cryptography-essentials",
-    description: "An in-depth article covering the essential concepts of cryptography in cybersecurity."
-  },
-  // Add more learning content items here
-]
+import { Book, Video, MessageCircle, Lightbulb, FileText, GitBranch } from 'lucide-react'
 
 export default function LearnPage() {
-  const [searchTerm, setSearchTerm] = useState('')
-
-  const filteredContent = learningContent.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const learningResources = [
+    {
+      title: "Learning Roadmaps",
+      icon: GitBranch,
+      description: "Structured paths to guide your cybersecurity learning journey",
+      href: "/learning-resources/roadmaps"
+    },
+    {
+      title: "Online Courses",
+      icon: Video,
+      description: "Curated list of free and paid cybersecurity courses from top platforms",
+      href: "/learning-resources/courses"
+    },
+    {
+      title: "Books",
+      icon: Book,
+      description: "Explore recommended cybersecurity books",
+      href: "/learning-resources/books"
+    },
+    {
+      title: "Content Creators",
+      icon: Video,
+      description: "Top YouTube channels, podcasts, and blogs in the cybersecurity field",
+      href: "/learning-resources/content-creators"
+    },
+    {
+      title: "Learning Communities",
+      icon: MessageCircle,
+      description: "Join forums and Discord channels for discussions and networking",
+      href: "/learning-resources/communities"
+    },
+    {
+      title: "Learning Tools",
+      icon: Lightbulb,
+      description: "Interactive platforms and tools to enhance your cybersecurity skills",
+      href: "/learning-resources/tools"
+    },
+    {
+      title: "Research Publications",
+      icon: FileText,
+      description: "Access academic publications and research in cybersecurity",
+      href: "/learning-resources/research"
+    }
+  ]
 
   return (
-    <div className="container mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold mb-8">Learn Cybersecurity</h1>
-
-      <div className="mb-8">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search for topics..."
-            className="w-full p-3 pl-10 bg-secondary rounded-md"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-        </div>
-      </div>
-
-      <div className="grid gap-6">
-        {filteredContent.map((item, index) => (
-          <Link 
-            key={index} 
-            href={item.link}
-            className="block bg-secondary hover:bg-secondary/80 rounded-lg p-6 transition-colors duration-200"
-          >
-            <div className="flex items-start">
-              {item.type === 'course' && <Book className="w-6 h-6 mr-3 mt-1" />}
-              {item.type === 'video' && <Video className="w-6 h-6 mr-3 mt-1" />}
-              {item.type === 'article' && <FileText className="w-6 h-6 mr-3 mt-1" />}
-              <div>
-                <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
-                <p className="text-muted-foreground mb-2">{item.provider}</p>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-8">Learning Resources</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {learningResources.map((resource) => {
+          const IconComponent = resource.icon
+          return (
+            <Link 
+              key={resource.title}
+              href={resource.href}
+              className="block p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <div className="flex items-start mb-4">
+                <IconComponent className="w-8 h-8 text-blue-500 mr-3" />
+                <h2 className="text-xl font-semibold text-white">{resource.title}</h2>
               </div>
-            </div>
-          </Link>
-        ))}
+              <p className="text-gray-400">{resource.description}</p>
+            </Link>
+          )
+        })}
       </div>
     </div>
   )
-}
-
+} 

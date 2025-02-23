@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { Shield, Twitter, Linkedin, Github } from 'lucide-react'
+import Link from "next/link"
+import { Shield, Twitter, Linkedin, Github } from "lucide-react"
 
 const Footer = () => {
   return (
@@ -7,7 +7,10 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-wrap justify-between items-center">
           <div className="w-full md:w-1/3 text-center md:text-left mb-6 md:mb-0">
-            <Link href="/" className="flex items-center justify-center md:justify-start text-2xl font-bold text-foreground">
+            <Link
+              href="/"
+              className="flex items-center justify-center md:justify-start text-2xl font-bold text-foreground"
+            >
               <Shield className="w-8 h-8 mr-2" />
               CyberNex
             </Link>
@@ -16,10 +19,26 @@ const Footer = () => {
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
             <h4 className="text-lg font-semibold mb-4 text-foreground">Quick Links</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/about" className="hover:text-foreground transition-colors duration-200">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-foreground transition-colors duration-200">Contact</Link></li>
-              <li><Link href="/privacy-policy" className="hover:text-foreground transition-colors duration-200">Privacy Policy</Link></li>
-              <li><Link href="/terms-of-service" className="hover:text-foreground transition-colors duration-200">Terms of Service</Link></li>
+              <li>
+                <Link href="/about" className="hover:text-foreground transition-colors duration-200">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-foreground transition-colors duration-200">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="hover:text-foreground transition-colors duration-200">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service" className="hover:text-foreground transition-colors duration-200">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="w-full md:w-1/3 text-center md:text-right">
