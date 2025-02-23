@@ -8,7 +8,7 @@ export default function CareersPage() {
     {
       title: "Internships",
       icon: GraduationCap,
-      description: "Find cybersecurity internship opportunities",
+      description: "Find cybersecurity internship opportunities roday",
       href: "/careers/internships"
     },
     {
