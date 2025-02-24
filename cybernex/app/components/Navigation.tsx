@@ -13,7 +13,11 @@ export function Navigation() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log('Navigation auth state:', { user, loading })
+    console.log('Auth State:', { 
+      isLoading: loading, 
+      isLoggedIn: !!user,
+      userData: user 
+    })
   }, [user, loading])
 
   const navigationItems = {
@@ -26,15 +30,17 @@ export function Navigation() {
         { name: 'Content Creators', href: '/learning-resources/content-creators' },
         { name: 'Learning Communities', href: '/learning-resources/communities' },
         { name: 'Learning Tools', href: '/learning-resources/tools' },
-        { name: 'Research Publications', href: '/learning-resources/research' },
+        { name: 'Research Publications', href: '/learning-resources/research-publications' },
       ]
     },
     'College Students': {
-      href: '/college-students',
+      href: '/college',
       items: [
-        { name: 'Resources', href: '/college-students/resources' },
-        { name: 'Internships', href: '/college-students/internships' },
-        { name: 'Learning Paths', href: '/college-students/learning-paths' },
+        { name: 'Student Resources', href: '/college/resources' },
+        { name: 'Student Internships', href: '/college/internships' },
+        { name: 'Learning Paths', href: '/college/learning-paths' },
+        { name: 'Student Discounts', href: '/college/discounts' },
+        { name: 'Academic Programs', href: '/college/programs' },
       ]
     },
     'Community': {
@@ -56,6 +62,26 @@ export function Navigation() {
     }
   }
 
+  const handleMouseLeave = (title: string) => {
+    const timeoutId = setTimeout(() => {
+      const dropdown = document.querySelector(`.dropdown-${title}`)
+      const dropdownButton = document.querySelector(`.dropdown-button-${title}`)
+      
+      const isDropdownHovered = dropdown?.matches(':hover')
+      const isButtonHovered = dropdownButton?.matches(':hover')
+      
+      if (!isDropdownHovered && !isButtonHovered) {
+        setActiveDropdown(null)
+      }
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }
+
+  const handleClick = (title: string) => {
+    setActiveDropdown(activeDropdown === title ? null : title)
+  }
+
   return (
     <>
       <nav className="sticky top-0 bg-white dark:bg-gray-800 shadow z-50">
@@ -69,11 +95,17 @@ export function Navigation() {
               {Object.entries(navigationItems).map(([title, { href, items }]) => (
                 <div 
                   key={title}
-                  className="relative"
+                  className={`relative group dropdown-${title}`}
+                  onMouseEnter={() => setActiveDropdown(title)}
+                  onMouseLeave={() => handleMouseLeave(title)}
                 >
                   <button
-                    onClick={() => setActiveDropdown(activeDropdown === title ? null : title)}
-                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 dark:text-gray-300 py-2"
+                    className={`dropdown-button-${title} flex items-center space-x-1 text-gray-700 hover:text-blue-600 
+                      dark:text-gray-300 py-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 
+                      focus:ring-opacity-50 rounded-md px-2`}
+                    onClick={() => handleClick(title)}
+                    aria-expanded={activeDropdown === title}
+                    aria-haspopup="true"
                   >
                     <Link 
                       href={href}
@@ -82,25 +114,38 @@ export function Navigation() {
                     >
                       {title}
                     </Link>
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        activeDropdown === title ? 'rotate-180' : ''
+                      }`} 
+                    />
                   </button>
 
-                  {activeDropdown === title && (
-                    <div 
-                      className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50"
-                    >
-                      {items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <div 
+                    className={`absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 
+                      transition-all duration-300 ease-in-out transform
+                      ${activeDropdown === title 
+                        ? 'opacity-100 translate-y-0 visible' 
+                        : 'opacity-0 -translate-y-2 invisible'}`}
+                    onMouseEnter={() => setActiveDropdown(title)}
+                    onMouseLeave={() => handleMouseLeave(title)}
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby={`dropdown-${title}`}
+                  >
+                    {items.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 
+                          dark:hover:bg-gray-700 transition-colors duration-150"
+                        role="menuitem"
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -119,41 +164,56 @@ export function Navigation() {
                   <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full"/>
                 </div>
               ) : user ? (
-                <div className="relative group">
+                <div 
+                  className="relative group"
+                  onMouseEnter={() => setActiveDropdown('profile')}
+                  onMouseLeave={() => handleMouseLeave('profile')}
+                >
                   <button 
                     className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 dark:text-gray-300"
-                    onClick={() => setActiveDropdown(activeDropdown === 'profile' ? null : 'profile')}
                   >
-                    <User className="w-5 h-5" />
-                    <span>{user.email?.split('@')[0]}</span>
-                    <ChevronDown className="w-4 h-4" />
+                    <div className="bg-gray-700 p-1 rounded-full">
+                      <User className="w-4 h-4 text-blue-500" />
+                    </div>
+                    <span className="text-sm font-medium">
+                      {user.email?.split('@')[0]}
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
+                      activeDropdown === 'profile' ? 'rotate-180' : ''
+                    }`} />
                   </button>
 
-                  {activeDropdown === 'profile' && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50">
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                      >
-                        My Profile
-                      </Link>
-                      <Link
-                        href="/profile/settings"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                      >
-                        Settings
-                      </Link>
-                      <button
-                        onClick={async () => {
-                          await signOut()
-                          setActiveDropdown(null)
-                        }}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                      >
-                        Sign Out
-                      </button>
+                  <div 
+                    className={`absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50
+                      transition-all duration-200 transform origin-top dropdown-profile
+                      ${activeDropdown === 'profile' ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}
+                    `}
+                    onMouseEnter={() => setActiveDropdown('profile')}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{user.email}</p>
                     </div>
-                  )}
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await signOut()
+                          window.location.href = '/'
+                        } catch (error) {
+                          console.error('Sign out failed:', error)
+                        }
+                      }}
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center space-x-4">
