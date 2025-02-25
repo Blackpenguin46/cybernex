@@ -1,5 +1,5 @@
 [build]
-  base = "."
+  base = ""
   command = "npm install && npm run build"
   publish = ".next"
   functions = "netlify/functions"
@@ -31,5 +31,16 @@
   external_node_modules = ["@supabase/supabase-js"]
 
 [context.production]
+  base = ""
+  command = "npm install && npm run build"
   publish = ".next"
-  command = "npm install && npm run build" 
+
+[context.deploy-preview]
+  base = ""
+  command = "npm install && npm run build"
+  publish = ".next"
+
+[git]
+  clean = true
+  fetchDepth = 1
+  lfs = false 
