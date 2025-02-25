@@ -9,8 +9,8 @@ export const supabase = createClient<Database>(
   supabaseAnonKey,
   {
     auth: {
-      persistSession: true,
       autoRefreshToken: true,
+      persistSession: true,
       detectSessionInUrl: true,
       flowType: 'pkce'
     },
