@@ -1,5 +1,5 @@
 [build]
-  base = "/"
+  base = ""
   command = "npm install && npm run build"
   publish = ".next"
   functions = "netlify/functions"
@@ -10,6 +10,7 @@
   NODE_VERSION = "18.x"
   NEXT_PUBLIC_SITE_URL = "https://cybernexacademy.netlify.app"
   NPM_VERSION = "9.x"
+  CI = "true"
 
 [build.processing]
   skip_processing = false
